@@ -1,0 +1,38 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  LambdaPoc
+
+  Sample SAM Template for LambdaPoc
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 120
+
+Resources:
+  GetS3listFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      FunctionName: GetS3listFunction
+      Description: The function lists all s3 buckets
+      Role: arn:aws:iam::477938431184:role/OneCloud/Nsodo_Retail
+      CodeUri: GetS3/
+      Handler: index.handler
+      Runtime: nodejs6.10
+      Events:
+        GetS3listApi:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /getS3list
+            Method: get
+
+Outputs:
+
+  GetS3listApi:
+    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/getS3list/"
+    
+  HelloWorldFunction:
+    Description: "Hello World Lambda Function ARN"
+    Value: !GetAtt GetS3listFunction.Arn
